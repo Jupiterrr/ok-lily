@@ -17,4 +17,4 @@ if __name__ == "__main__":
     channel = event_channel()
     channel.register_handler("start show display", lambda host: startVNC(host))
     channel.register_handler("prepare display switch", releaseVNC)
-    channel.loop("ws://192.168.1.8:8080")
+    channel.loop("ws://192.168.1.8:8080", targetBindings = ["beamer"])

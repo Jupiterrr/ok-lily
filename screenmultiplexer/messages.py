@@ -28,7 +28,7 @@ class event_channel:
         else:
             return self.ws.sock.getsockname()[0]
 
-    def loop(self, endpoint, owner_hint = ""):
+    def loop(self, endpoint, owner_hint = "", targetBindings = ["any"]):
         print "connection to " + endpoint
         self.ws = create_connection(endpoint)
         print "connected :)"
@@ -52,7 +52,7 @@ class event_channel:
                 continue
             print data_parsed
 
-            if str(data_parsed['targetID']).lower() != self.id and str(data_parsed['targetID']).lower() != "any":
+            if str(data_parsed['targetID']).lower() != self.id and str(data_parsed['targetID']).lower() not in targetBindings:
                 print "this message is not meant for me (was for %s)" % str(data_parsed["targetID"])
                 continue
 
