@@ -80,7 +80,7 @@ public class MainActivity extends Activity {
                 JSONObject object = new JSONObject();
                 try {
                     object.put("command", "hello");
-//                    object.put("id", address);
+//                    object.put("ownerHint", address);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
