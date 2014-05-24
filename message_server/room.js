@@ -36,20 +36,7 @@ Room.prototype.onMessage = function (sender, message) {
   console.log('received: %s', message);
   try {
     var rq = JSON.parse(message);
-  
-    switch (rq.command) {
-      case "list_users":
-        commands.listCommand(this, sender, rq);
-        break;
-      case "lights_on":
-        commands.lightsOnCommand(this, sender, rq);
-        break;
-      case "lights_off":
-        commands.lightsOffCommand(this, sender, rq);
-        break;
-      default:
-        commands.defaultCommand(this, sender, rq);
-    } 
+    commands.exec(this, sender, rq);
   } catch (e) {
     console.log("error: ", e);
   }
