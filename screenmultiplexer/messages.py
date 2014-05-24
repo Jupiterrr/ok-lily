@@ -6,11 +6,12 @@ class event_channel:
         self.handlers = {}
         self.my_id = None
 
-    def generate_message(self, command, senderid, targetid, payload = {}):
-        return json.dumps({"command": command, "senderID": senderid, "targetID": targetid, "payload": payload})
+    def generate_message(self, command, targetid, payload = {}):
+        return json.dumps({"command": command, "targetID": targetid, "payload": payload})
 
-    def generate_hello_message(self, id = "no id given :("):
-        return json.dumps({"command": "hello", "payload": {}})
+
+    def generate_hello_message(self, owner_hint = ""):
+        return json.dumps({"command": "hello", "payload": {"owner_hint": owner_hint}})
 
     def register_handler(self, command, handler):
         self.handlers[command] = handler
@@ -27,11 +28,11 @@ class event_channel:
         else:
             return self.ws.sock.getsockname()[0]
 
-    def loop(self, endpoint):
+    def loop(self, endpoint, owner_hint = ""):
         print "connection to " + endpoint
         self.ws = create_connection(endpoint)
         print "connected :)"
-        self.send(self.generate_hello_message())
+        self.send(self.generate_hello_message(owner_hint))
         ack = json.loads(self.ws.recv())
         self.id = str(ack["payload"]["id"])
         print "my id is " + self.id
