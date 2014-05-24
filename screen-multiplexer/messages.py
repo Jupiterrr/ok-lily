@@ -37,21 +37,23 @@ class event_channel:
             try:
                 data_parsed = json.loads(data)
             except:
+                data_parsed = {}
                 print "could not parse data"
 
             if "targetID" not in data_parsed:
                 print "message does not contain a targetID - ignoring it"
                 continue
+            print data_parsed
 
-            if str(data_parsed["targetID"]).to_lower() != self.id:
+            if str(data_parsed['targetID']).lower() != self.id:
                 print "this message is not meant for me (was for %s)" % str(data_parsed["targgetID"])
                 continue
 
-            if data_parsed["command"] in handlers:
+            if data_parsed["command"] in self.handlers:
                 if "payload" in data_parsed:
-                    handlers[data_parsed["command"]](data_parsed["payload"])
+                    self.handlers[data_parsed["command"]](data_parsed["payload"])
                 else:
-                    handlers[data_parsed["command"]]()
+                    self.handlers[data_parsed["command"]]()
 
                 print "handled that"
             else:
