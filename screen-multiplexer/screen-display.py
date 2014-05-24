@@ -17,4 +17,4 @@ if __name__ == "__main__":
     channel = event_channel()
     channel.register_handler("start show display", startVNC)
     channel.register_handler("stop show display", releaseVNC)
-    channel.loop("ws://141.3.229.49:8080")
+    channel.loop("ws://192.168.1.8:8080")

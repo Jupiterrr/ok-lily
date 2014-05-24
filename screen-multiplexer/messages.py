@@ -46,7 +46,7 @@ class event_channel:
             print data_parsed
 
             if str(data_parsed['targetID']).lower() != self.id:
-                print "this message is not meant for me (was for %s)" % str(data_parsed["targgetID"])
+                print "this message is not meant for me (was for %s)" % str(data_parsed["targetID"])
                 continue
 
             if data_parsed["command"] in self.handlers:
