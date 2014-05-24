@@ -61,8 +61,8 @@ public class MainActivity extends Activity {
         mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
         mDeviceAddress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
 
-        getActionBar().setTitle(mDeviceName);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+//        getActionBar().setTitle(mDeviceName);
+//        getActionBar().setDisplayHomeAsUpEnabled(true);
         Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
         bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
 
@@ -100,17 +100,7 @@ public class MainActivity extends Activity {
 
         Log.i("OnResume", "resume");
 
-//        BluetoothHandler bluetoothHandler = new BluetoothHandler();
-
-//        bluetoothHandler.initialize();
-
-//        bluetoothHandler.initService();
-//        bluetoothHandler.checkBLE();
         mBluetoothHandler.scanDevices();
-
-        // Initializes list view adapter.
-//        mLeDeviceListAdapter = new LeDeviceListAdapter();
-//        setListAdapter(mLeDeviceListAdapter);
 
 //        connectWebSocket();
 
@@ -130,7 +120,7 @@ public class MainActivity extends Activity {
         public void onServiceConnected(ComponentName componentName, IBinder service) {
             mBluetoothLeService = ((BluetoothLeService.LocalBinder) service).getService();
             if (!mBluetoothLeService.initialize()) {
-                Log.e(TAG, "Unable to initialize Bluetooth");
+                Log.i(TAG, "Unable to initialize Bluetooth");
                 finish();
             }
             // Automatically connects to the device upon successful start-up initialization.

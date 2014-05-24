@@ -67,64 +67,14 @@ public class BluetoothHandler {
                 }
             };
 
-    /**
-     * Initializes a reference to the local Bluetooth adapter.
-     *
-     * @return Return true if the initialization is successful.
-     */
-    public boolean initialize() {
-        // Initializes a Bluetooth adapter.  For API level 18 and above, get a reference to
-        // BluetoothAdapter through BluetoothManager.
-//        final BluetoothManager bluetoothManager =
-//                (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
-//        mBluetoothAdapter = bluetoothManager.getAdapter();
 
-        // Checks if Bluetooth is supported on the device.
-//        if (mBluetoothAdapter == null) {
-//            Toast.makeText(this, "Not supported", Toast.LENGTH_SHORT).show();
-//            finish();
-//            return false;
-//        }
-
-        return true;
-    }
-
-   public boolean initService(){
-       // For API level 18 and above, get a reference to BluetoothAdapter through
-       // BluetoothManager.
-  //     if (mBluetoothManager == null) {
-  //         mBluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
-  //         if (mBluetoothManager == null) {
-  //             Log.e(TAG, "Unable to initialize BluetoothManager.");
-  //             return false;
-  //         }
-  //     }
-
-/*       mBluetoothAdapter = mBluetoothManager.getAdapter();
-       if (mBluetoothAdapter == null) {
-           Log.e(TAG, "Unable to obtain a BluetoothAdapter.");
-           return false;
-       }
-*/
-       return true;
-   }
-
-   public void scanDevices() {
+    public void scanDevices() {
        scanLeDevice(true);
    }
 
-   public void checkBLE() {
-       // Ensures Bluetooth is enabled on the device.  If Bluetooth is not currently enabled,
-       // fire an intent to display a dialog asking the user to grant permission to enable it.
-//       if (!mBluetoothAdapter.isEnabled()) {
-//           Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-//           startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-//       }
 
-   }
-
-   static class ViewHolder {
-        //TextView deviceName;
+    static class ViewHolder {
+        TextView deviceName;
         TextView deviceAddress;
     }
 }
