@@ -21,6 +21,12 @@ class event_channel:
         else:
             self.ws.send(msg)
 
+    def get_ip(self):
+        if self.ws is None:
+            print "not connected"
+        else:
+            return self.ws.sock.getsockname()[0]
+
     def loop(self, endpoint):
         print "connection to " + endpoint
         self.ws = create_connection(endpoint)
