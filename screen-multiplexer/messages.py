@@ -26,7 +26,9 @@ class event_channel:
         self.ws = create_connection(endpoint)
         print "connected :)"
         self.send(self.generate_hello_message())
-        self.id = json.loads(self.recv()["id"])
+        ack = json.loads(self.ws.recv())
+        self.id = ack["payload"]["id"]
+        print "my id is " + str(self.id)
         while True:
             data = self.ws.recv()
             data_parsed = {}
