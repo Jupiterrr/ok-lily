@@ -20,7 +20,7 @@ def on_open(ws):
             if command == "exit":
                 break
             #try:
-            ws.send(json.dumps(command))
+            ws.send(command)
             #except:
             #    print "could not send that (json correct?)"
         ws.close()
