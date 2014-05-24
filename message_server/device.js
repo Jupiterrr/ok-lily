@@ -15,8 +15,16 @@ Device.prototype.greet = function() {
       id: that.id
     }
   };
-  var msg = JSON.stringify(msgObj);
+  this.sendObj(msgObj);
+}
+
+Device.prototype.send = function(msg) {
   this.ws.send(msg);
+}
+
+Device.prototype.sendObj = function(obj) {
+  var msg = JSON.stringify(obj);
+  this.send(msg);
 }
 
 module.exports = Device;

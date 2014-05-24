@@ -1,3 +1,5 @@
+var commands = require('./commands');
+
 
 function Room() {
   this.devices = [];
@@ -32,19 +34,28 @@ Room.prototype.list = function () {
 
 Room.prototype.onMessage = function (sender, message) {
   console.log('received: %s', message);
-  this.broadcast(sender, message);
+  try {
+    var rq = JSON.parse(message);
+  
+    switch (rq.command) {
+      case "list_users":
+        commands.listCommand(this, sender, rq);
+        break;
+      default:
+        commands.defaultCommand(this, sender, rq);
+    } 
+  } catch (e) {
+    console.log("error: ", e);
+  }
+  
 }
 
-Room.prototype.broadcast = function (sender, message) {
-  // console.log('received: %s', message);
-  var msgObj = {
-    msg: message,
-    origin: sender.id
-  }
-  var msg = JSON.stringify(msgObj);
+Room.prototype.broadcast = function (sender, messageObj) {
+  var msg = JSON.stringify(messageObj);
+  console.log('broadcast: %s', msg);
   this.devices.forEach(function(device) {
     if (device != sender) {
-      device.ws.send(msg);
+      device.send(msg);
     }
   })
 }
