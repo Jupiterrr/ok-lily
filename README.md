@@ -21,6 +21,11 @@ Notes
 
 Raspberry Pi : IP 192.168.2.11
 
+user: pi
+pass: raspberry
+
+ssh pi@192.168.2.11
+
 scan 
 
 * sudo hcitool lescan
