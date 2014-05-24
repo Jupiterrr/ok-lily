@@ -2,12 +2,21 @@ package com.ok_lily_android_client.app;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothManager;
+import android.content.ComponentName;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
+import android.os.Handler;
+import android.os.IBinder;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Build;
 import android.util.Log;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ExpandableListView;
 import android.widget.TextView;
 
 import org.java_websocket.client.WebSocketClient;
@@ -18,13 +27,28 @@ import java.net.URISyntaxException;
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiInfo;
 import android.content.Context;
+import android.widget.Toast;
 
 import org.json.*;
 
 public class MainActivity extends Activity {
+    private final static String TAG = BluetoothHandler.class.getSimpleName();
+
+    public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
+    public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
+
     private WebSocketClient mWebSocketClient;
     private TextView text;
     private String myID;
+    private BluetoothAdapter mBluetoothAdapter;
+    private BluetoothManager mBluetoothManager;
+    private BluetoothHandler mBluetoothHandler;
+    private String mDeviceName;
+    private String mDeviceAddress;
+    private BluetoothLeService mBluetoothLeService;
+
+    //    private Handler mHandler;
+    private static final int REQUEST_ENABLE_BT = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,9 +57,91 @@ public class MainActivity extends Activity {
 
         text = (TextView)findViewById(R.id.text);
 
-        connectWebSocket();
+        final Intent intent = getIntent();
+        mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
+        mDeviceAddress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
+
+        getActionBar().setTitle(mDeviceName);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
+        bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
+
+        final BluetoothManager bluetoothManager =
+                (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+        mBluetoothAdapter = bluetoothManager.getAdapter();
+
+        if (mBluetoothAdapter == null) {
+            Toast.makeText(this, "Not supported", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
+        mBluetoothHandler = new BluetoothHandler(mBluetoothAdapter, null, null);
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (mBluetoothManager == null) {
+            mBluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+            if (mBluetoothManager == null) {
+                Log.e(TAG, "Unable to initialize BluetoothManager.");
+                return;
+            }
+        }
+
+        mBluetoothAdapter = mBluetoothManager.getAdapter();
+        if (mBluetoothAdapter == null) {
+            Log.e(TAG, "Unable to obtain a BluetoothAdapter.");
+            return;
+        }
+
+        Log.i("OnResume", "resume");
+
+//        BluetoothHandler bluetoothHandler = new BluetoothHandler();
+
+//        bluetoothHandler.initialize();
+
+//        bluetoothHandler.initService();
+//        bluetoothHandler.checkBLE();
+        mBluetoothHandler.scanDevices();
+
+        // Initializes list view adapter.
+//        mLeDeviceListAdapter = new LeDeviceListAdapter();
+//        setListAdapter(mLeDeviceListAdapter);
+
+//        connectWebSocket();
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unbindService(mServiceConnection);
+        mBluetoothLeService = null;
+    }
+
+    // Code to manage Service lifecycle.
+    private final ServiceConnection mServiceConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder service) {
+            mBluetoothLeService = ((BluetoothLeService.LocalBinder) service).getService();
+            if (!mBluetoothLeService.initialize()) {
+                Log.e(TAG, "Unable to initialize Bluetooth");
+                finish();
+            }
+            // Automatically connects to the device upon successful start-up initialization.
+            mBluetoothLeService.connect(mDeviceAddress);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            mBluetoothLeService = null;
+        }
+    };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -125,4 +231,6 @@ public class MainActivity extends Activity {
     public void sendMessage() {
         mWebSocketClient.send("Hello");
     }
+
+
 }
