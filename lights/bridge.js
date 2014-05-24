@@ -54,6 +54,13 @@ Lights.prototype.off = function() {
     .done();
 }
 
+Lights.prototype.alert = function() {
+  var state = lightState.create().alert();
+  this.api.setGroupLightState(0, state)
+    .then(displayResult)
+    .done();
+}
+
 
 module.exports.connect = function(cb) {
   locate(id, function(ip) {
