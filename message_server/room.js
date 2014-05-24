@@ -41,6 +41,12 @@ Room.prototype.onMessage = function (sender, message) {
       case "list_users":
         commands.listCommand(this, sender, rq);
         break;
+      case "lights_on":
+        commands.lightsOnCommand(this, sender, rq);
+        break;
+      case "lights_off":
+        commands.lightsOffCommand(this, sender, rq);
+        break;
       default:
         commands.defaultCommand(this, sender, rq);
     } 
