@@ -48,7 +48,11 @@ class event_channel:
                 continue
 
             if data_parsed["command"] in handlers:
-                handlers[data_parsed["command"]](data_parsed["payload"])
+                if "payload" in data_parsed:
+                    handlers[data_parsed["command"]](data_parsed["payload"])
+                else:
+                    handlers[data_parsed["command"]]()
+
                 print "handled that"
             else:
                 print "no handler registered for that command"
