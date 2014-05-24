@@ -227,12 +227,19 @@ public class MainActivity extends Activity {
                         try {
                             JSONObject object = (JSONObject) new JSONTokener(message).nextValue();
                             String query = object.getString("command");
-                            String senderID = object.getString("payload");
 
                             if (query.contains("hello_ack")) {
+                                String senderID = object.getString("payload");
                                 myID = senderID;
+
+                                Log.i(TAG, "My ID" + myID);
                             }
-                            Log.i(TAG, myID);
+
+                            if (query.contains("mute_mobile_devices")){
+
+                                    //mute device or start activity with unmute image
+                            }
+
                             //JSONArray payload = object.getJSONArray("payload");
                         } catch (JSONException e) {
                             e.printStackTrace();
