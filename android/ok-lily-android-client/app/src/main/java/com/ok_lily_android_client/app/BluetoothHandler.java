@@ -1,5 +1,6 @@
 package com.ok_lily_android_client.app;
 
+import android.app.Activity;
 import android.app.ListActivity;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothAdapter;
@@ -22,26 +23,34 @@ import java.util.ArrayList;
  */
 public class BluetoothHandler {
 
-    private final static String TAG = BluetoothHandler.class.getSimpleName();
+    private final static String TAG     = BluetoothHandler.class.getSimpleName();
+    private final static String DEVICE  = "00:07:80:78:F5:93";
     private BluetoothManager mBluetoothManager;
     private BluetoothAdapter mBluetoothAdapter;
     private boolean mScanning;
-    private Handler mHandler;
     private static final int REQUEST_ENABLE_BT = 1;
-
-//    private LeDeviceListAdapter mLeDeviceListAdapter;
+    private ArrayList<BluetoothDevice> mLeDevices;
+    private Handler mHandler;
 
     // Stops scanning after 10 seconds.
-    private static final long SCAN_PERIOD = 10000;
+    private static final long SCAN_PERIOD = 3000;
 
-    public BluetoothHandler(BluetoothAdapter adapter, BluetoothManager btmanager, Handler handler) {
+    public BluetoothHandler(BluetoothAdapter adapter) {
         mBluetoothAdapter = adapter;
-//        mBluetoothManager = btmanager;
-//        mHandler          = handler;
+        mLeDevices        = new ArrayList<BluetoothDevice>();
+        mHandler          = new Handler();
     }
 
     private void scanLeDevice(final boolean enable) {
         if (enable) {
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mScanning = false;
+                    mBluetoothAdapter.stopLeScan(mLeScanCallback);
+                }
+            }, SCAN_PERIOD);
+
             mScanning = true;
             mBluetoothAdapter.startLeScan(mLeScanCallback);
         } else {
@@ -50,31 +59,45 @@ public class BluetoothHandler {
         }
     }
 
+    private void addDevice(BluetoothDevice device) {
+        if(!mLeDevices.contains(device)) {
+            mLeDevices.add(device);
+        }
+    }
+
+    public BluetoothDevice getDevice(int position) {
+        return mLeDevices.get(position);
+    }
+
+    public ArrayList<BluetoothDevice> getDevices() {
+        return mLeDevices;
+    }
+
     // Device scan callback.
     private BluetoothAdapter.LeScanCallback mLeScanCallback =
             new BluetoothAdapter.LeScanCallback() {
 
                 @Override
                 public void onLeScan(final BluetoothDevice device, int rssi, byte[] scanRecord) {
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Log.i("Device", device.toString());
-//                            mLeDeviceListAdapter.addDevice(device);
-//                            mLeDeviceListAdapter.notifyDataSetChanged();
-                        }
-                    });
+                    Log.i("Device address", device.getAddress().toString());
+                    addDevice(device);
+
+//                    if (device.getAddress().contains(DEVICE)) {
+//                        stopScan();
+//                    }
                 }
             };
-
 
     public void scanDevices() {
        scanLeDevice(true);
    }
 
+    public void stopScan() {
+        Log.i("Stop scan", "stopping scan");
 
-    static class ViewHolder {
-        TextView deviceName;
-        TextView deviceAddress;
+        if (mScanning) {
+            mBluetoothAdapter.stopLeScan(mLeScanCallback);
+            mScanning = false;
+        }
     }
 }

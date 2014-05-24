@@ -8,6 +8,7 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.v7.app.ActionBarActivity;
@@ -32,10 +33,11 @@ import android.widget.Toast;
 import org.json.*;
 
 public class MainActivity extends Activity {
-    private final static String TAG = BluetoothHandler.class.getSimpleName();
+    private final static String TAG = MainActivity.class.getSimpleName();
 
-    public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
+    public static final String EXTRAS_DEVICE_NAME    = "DEVICE_NAME";
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
+    public static final String WEBSERVER             = "ws://192.168.1.8:8080";
 
     private WebSocketClient mWebSocketClient;
     private TextView text;
@@ -61,28 +63,8 @@ public class MainActivity extends Activity {
         mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
         mDeviceAddress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
 
-//        getActionBar().setTitle(mDeviceName);
-//        getActionBar().setDisplayHomeAsUpEnabled(true);
         Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
         bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
-
-        final BluetoothManager bluetoothManager =
-                (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
-        mBluetoothAdapter = bluetoothManager.getAdapter();
-
-        if (mBluetoothAdapter == null) {
-            Toast.makeText(this, "Not supported", Toast.LENGTH_SHORT).show();
-            finish();
-            return;
-        }
-
-        mBluetoothHandler = new BluetoothHandler(mBluetoothAdapter, null, null);
-    }
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
 
         if (mBluetoothManager == null) {
             mBluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
@@ -91,19 +73,49 @@ public class MainActivity extends Activity {
                 return;
             }
         }
-
         mBluetoothAdapter = mBluetoothManager.getAdapter();
         if (mBluetoothAdapter == null) {
             Log.e(TAG, "Unable to obtain a BluetoothAdapter.");
             return;
         }
 
-        Log.i("OnResume", "resume");
+        mBluetoothHandler = new BluetoothHandler(mBluetoothAdapter);
+    }
+
+    private class BluetoothSearchTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... urls) {
+            checkDevices();
+            return "no";
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+        }
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        Log.i(TAG, "start scan");
+
+/*        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Log.i("Checking", "resume");
+
+                checkDevices();
+            }
+        });
+*/
 
         mBluetoothHandler.scanDevices();
 
-//        connectWebSocket();
-
+        BluetoothSearchTask task = new BluetoothSearchTask();
+        task.execute();
     }
 
     @Override
@@ -111,6 +123,16 @@ public class MainActivity extends Activity {
         super.onDestroy();
         unbindService(mServiceConnection);
         mBluetoothLeService = null;
+    }
+
+    private void checkDevices() {
+
+        if (mBluetoothHandler.getDevices().contains("00:07:80:78:F5:93")) {
+            mBluetoothHandler.stopScan();
+
+            Log.i(TAG, "stopper");
+        }
+
     }
 
     // Code to manage Service lifecycle.
@@ -156,7 +178,7 @@ public class MainActivity extends Activity {
     private void connectWebSocket() {
         URI uri;
         try {
-            uri = new URI("ws://7d76b2c7.ngrok.com");
+            uri = new URI(WEBSERVER);
         } catch (URISyntaxException e) {
             e.printStackTrace();
             return;
@@ -181,7 +203,6 @@ public class MainActivity extends Activity {
                     e.printStackTrace();
                 }
 
-//                mWebSocketClient.send("Hello from " + Build.MANUFACTURER + " " + Build.MODEL);
                 mWebSocketClient.send(object.toString());
             }
 
@@ -196,8 +217,9 @@ public class MainActivity extends Activity {
 
                         try {
                             JSONObject object = (JSONObject) new JSONTokener(message).nextValue();
-                            String query = object.getString("query");
-                            JSONArray locations = object.getJSONArray("locations");
+                            String query = object.getString("command");
+//                            String senderID = object.getString("senderID");
+                            JSONArray payload = object.getJSONArray("payload");
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -221,6 +243,4 @@ public class MainActivity extends Activity {
     public void sendMessage() {
         mWebSocketClient.send("Hello");
     }
-
-
 }
