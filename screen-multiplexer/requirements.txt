@@ -1,2 +1,3 @@
 twisted
 hg+http://bitbucket.org/pygame/pygame
+git+https://github.com/liris/websocket-client
