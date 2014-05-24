@@ -27,8 +27,8 @@ class event_channel:
         print "connected :)"
         self.send(self.generate_hello_message())
         ack = json.loads(self.ws.recv())
-        self.id = ack["payload"]["id"]
-        print "my id is " + str(self.id)
+        self.id = str(ack["payload"]["id"])
+        print "my id is " + self.id
         while True:
             data = self.ws.recv()
             data_parsed = {}
@@ -39,8 +39,12 @@ class event_channel:
             except:
                 print "could not parse data"
 
-            if "targetID" not in data_parsed or data_parsed["targetID"].to_lower() != self.mac:
-                print "this message is not meant for me"
+            if "targetID" not in data_parsed:
+                print "message does not contain a targetID - ignoring it"
+                continue
+
+            if str(data_parsed["targetID"]).to_lower() != self.id:
+                print "this message is not meant for me (was for %s)" % str(data_parsed["targgetID"])
                 continue
 
             if data_parsed["command"] in handlers:
