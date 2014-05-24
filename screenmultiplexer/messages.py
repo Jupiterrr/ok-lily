@@ -45,7 +45,7 @@ class event_channel:
                 continue
             print data_parsed
 
-            if str(data_parsed['targetID']).lower() != self.id:
+            if str(data_parsed['targetID']).lower() != self.id and str(data_parsed['targetID']).lower() != "any":
                 print "this message is not meant for me (was for %s)" % str(data_parsed["targetID"])
                 continue
 
