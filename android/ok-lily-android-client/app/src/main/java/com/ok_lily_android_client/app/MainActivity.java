@@ -8,18 +8,25 @@ import android.util.Log;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import org.json.*;
+
 public class MainActivity extends Activity {
     private WebSocketClient mWebSocketClient;
+    private TextView text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        text = (TextView)findViewById(R.id.text);
 
         connectWebSocket();
     }
@@ -48,7 +55,7 @@ public class MainActivity extends Activity {
     private void connectWebSocket() {
         URI uri;
         try {
-            uri = new URI("ws://127.0.0.1:8100");
+            uri = new URI("ws://192.168.2.10:8100");
         } catch (URISyntaxException e) {
             e.printStackTrace();
             return;
@@ -68,6 +75,7 @@ public class MainActivity extends Activity {
                     @Override
                     public void run() {
                         Log.i("Websocket", "Message" + message);
+                        text.setText(message);
                     }
                 });
             }
