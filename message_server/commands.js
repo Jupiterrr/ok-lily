@@ -5,32 +5,43 @@ Bridge.connect(function(lights_local) {
   lights = lights_local;
 })
 
-function listCommand(room, sender, messageObj) {
-  var ids = room.list().map(function(device) { return device.id; });
-  var msgObj = {
-    command: "list_users",
-    payload: {
-      participants : ids
+var commands = {
+  "list_users": 
+    function(room, sender, messageObj) {
+      var ids = room.list().map(function(device) { return device.id; });
+      var msgObj = {
+        command: "list_users",
+        payload: {
+          participants : ids
+        }
+      }
+      sender.sendObj(msgObj);
+    },
+
+  "lights_on": 
+    function(room, sender, messageObj) {
+      if (lights) lights.on();
+    },
+  
+  "lights_off":
+    function lightsOffCommand(room, sender, messageObj) {
+      if (lights) lights.off();
+    },
+
+  "lights_alert":
+    function lightsOffCommand(room, sender, messageObj) {
+      if (lights) lights.alert();
+    },
+  
+  "default":
+    function(room, sender, messageObj) {
+      room.broadcast(sender, messageObj);
     }
-  }
-  sender.sendObj(msgObj);
-}
 
-function defaultCommand(room, sender, messageObj) {
-  room.broadcast(sender, messageObj);
-}
-
-function lightsOnCommand(room, sender, messageObj) {
-  if (lights) lights.on();
-}
-
-function lightsOffCommand(room, sender, messageObj) {
-  if (lights) lights.off();
-}
-
-module.exports = {
-  listCommand: listCommand,
-  defaultCommand: defaultCommand,
-  lightsOnCommand: lightsOnCommand,
-  lightsOffCommand: lightsOffCommand
 };
+
+
+module.exports.exec = function(room, sender, rq) {
+  var command = (rq.command in commands) ? commands[rq.command] : commands["default"];
+  command(room, sender, rq);
+}
