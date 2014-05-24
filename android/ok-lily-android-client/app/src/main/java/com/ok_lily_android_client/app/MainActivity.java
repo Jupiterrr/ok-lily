@@ -15,11 +15,16 @@ import org.java_websocket.handshake.ServerHandshake;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import android.net.wifi.WifiManager;
+import android.net.wifi.WifiInfo;
+import android.content.Context;
+
 import org.json.*;
 
 public class MainActivity extends Activity {
     private WebSocketClient mWebSocketClient;
     private TextView text;
+    private String myID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,11 +66,27 @@ public class MainActivity extends Activity {
             return;
         }
 
+        /**
+         * @todo move out to own handler
+         */
         mWebSocketClient = new WebSocketClient(uri) {
             @Override
             public void onOpen(ServerHandshake serverHandshake) {
                 Log.i("Websocket", "Opened");
-                mWebSocketClient.send("Hello from " + Build.MANUFACTURER + " " + Build.MODEL);
+                WifiManager manager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+                WifiInfo info       = manager.getConnectionInfo();
+                String address      = info.getMacAddress();
+
+                JSONObject object = new JSONObject();
+                try {
+                    object.put("command", "hello");
+//                    object.put("id", address);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+//                mWebSocketClient.send("Hello from " + Build.MANUFACTURER + " " + Build.MODEL);
+                mWebSocketClient.send(object.toString());
             }
 
             @Override
@@ -76,6 +97,14 @@ public class MainActivity extends Activity {
                     public void run() {
                         Log.i("Websocket", "Message" + message);
                         text.setText(message);
+
+                        try {
+                            JSONObject object = (JSONObject) new JSONTokener(message).nextValue();
+                            String query = object.getString("query");
+                            JSONArray locations = object.getJSONArray("locations");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
             }
