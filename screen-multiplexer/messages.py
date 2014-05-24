@@ -1,15 +1,10 @@
 import json
-from uuid import getnode as get_mac_as_long
 from websocket import create_connection
-
-def get_mac():
-    return ':'.join(s.encode('hex') for s in str(get_mac_as_long())[2:-1].decode('hex'))
 
 class event_channel:
     def __init__(self):
         self.handlers = {}
         self.my_id = None
-        self.mac = get_mac()
 
     def generate_message(self, command, senderid, targetid, payload = {}):
         return json.dumps({"command": command, "senderID": senderid, "targetID": targetid, "payload": payload})
