@@ -1,12 +1,14 @@
-import subprocess
+import subprocess as sub
 import json
 from messages import event_channel
+import signal
+import os
 
 def startVNC(host):
-    currentVnc = sub.Popen(['vncviewer', '-ViewOnly', '-Fullscreen', host],stdout=sub.PIPE,stderr=sub.PIPE, preexec_fn=os.d)
+    currentVnc = sub.Popen(['vncviewer', '-ViewOnly', '-Fullscreen', host],stdout=sub.PIPE,stderr=sub.PIPE, preexec_fn=os.setsid)
 
 def releaseVNC():
-    currentVnc.terminate()
+    os.killpg(currentVnc.pid, signal.SIGTERM)
 
 if __name__ == "__main__":
     channel = event_channel()
