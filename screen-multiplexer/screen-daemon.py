@@ -8,10 +8,6 @@ def startVNC():
 def stopVNC(process):
     process.terminate()
 
-def isVNCup(process):
-    return process.returncode() == None
-
-
 if __name__ == "__main__":
     currentVnc = None
     channel = event_channel()
