@@ -1,15 +1,19 @@
 var uuid = require('node-uuid');
 
+var idCounter = 0;
+
 function Device(ws) {
   this.ws = ws;
-  this.id = uuid.v4();
+  this.id = ++idCounter;
 }
 
 Device.prototype.greet = function() {
   var that = this;
   var msgObj = {
-    msg: "hello",
-    yourID: that.id
+    command :"hello_ack",
+    payload: {
+      id: that.id
+    }
   };
   var msg = JSON.stringify(msgObj);
   this.ws.send(msg);

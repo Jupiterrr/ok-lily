@@ -6,7 +6,7 @@ function Room() {
 Room.prototype.join = function (device) {
   var that = this;
   this.devices.push(device);
-  console.log("device joined: ", device);
+  console.log("device joined: ", device.id);
   device.greet();
 
   device.ws.on('message', function(message) {
