@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">ok-lily-android-client</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="text">Waiting for messages</string>
     <string name="action_settings">Settings</string>
 
 </resources>
