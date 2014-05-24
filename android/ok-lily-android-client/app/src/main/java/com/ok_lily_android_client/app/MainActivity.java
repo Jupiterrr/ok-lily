@@ -55,7 +55,7 @@ public class MainActivity extends Activity {
     private void connectWebSocket() {
         URI uri;
         try {
-            uri = new URI("ws://192.168.2.10:8100");
+            uri = new URI("ws://7d76b2c7.ngrok.com");
         } catch (URISyntaxException e) {
             e.printStackTrace();
             return;
