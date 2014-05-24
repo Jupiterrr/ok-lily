@@ -9,6 +9,7 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
+import android.media.AudioManager;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.IBinder;
@@ -236,16 +237,25 @@ public class MainActivity extends Activity {
                             }
 
                             if (query.contains("mute_mobile_devices")){
-
-                                    //mute device or start activity with unmute image
+                                AudioManager amanager=(AudioManager)getSystemService(Context.AUDIO_SERVICE);
+                                amanager.setStreamMute(AudioManager.STREAM_NOTIFICATION, true);
+                                amanager.setStreamMute(AudioManager.STREAM_ALARM, true);
+                                amanager.setStreamMute(AudioManager.STREAM_MUSIC, true);
+                                amanager.setStreamMute(AudioManager.STREAM_RING, true);
+                                amanager.setStreamMute(AudioManager.STREAM_SYSTEM, true);
                             }
 
-                            //JSONArray payload = object.getJSONArray("payload");
+                            if (query.contains("unmute_mobile_devices")){
+                                AudioManager amanager=(AudioManager)getSystemService(Context.AUDIO_SERVICE);
+                                amanager.setStreamMute(AudioManager.STREAM_NOTIFICATION, false);
+                                amanager.setStreamMute(AudioManager.STREAM_ALARM, false);
+                                amanager.setStreamMute(AudioManager.STREAM_MUSIC, false);
+                                amanager.setStreamMute(AudioManager.STREAM_RING, false);
+                                amanager.setStreamMute(AudioManager.STREAM_SYSTEM, false);
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-
-
                     }
                 });
             }
