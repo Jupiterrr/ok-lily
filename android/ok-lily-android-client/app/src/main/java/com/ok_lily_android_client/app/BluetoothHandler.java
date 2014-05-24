@@ -24,7 +24,6 @@ import java.util.ArrayList;
 public class BluetoothHandler {
 
     private final static String TAG     = BluetoothHandler.class.getSimpleName();
-    private final static String DEVICE  = "00:07:80:78:F5:93";
     private BluetoothManager mBluetoothManager;
     private BluetoothAdapter mBluetoothAdapter;
     private boolean mScanning;
@@ -43,14 +42,14 @@ public class BluetoothHandler {
 
     private void scanLeDevice(final boolean enable) {
         if (enable) {
-            mHandler.postDelayed(new Runnable() {
+/*            mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     mScanning = false;
                     mBluetoothAdapter.stopLeScan(mLeScanCallback);
                 }
             }, SCAN_PERIOD);
-
+*/
             mScanning = true;
             mBluetoothAdapter.startLeScan(mLeScanCallback);
         } else {
@@ -81,10 +80,6 @@ public class BluetoothHandler {
                 public void onLeScan(final BluetoothDevice device, int rssi, byte[] scanRecord) {
                     Log.i("Device address", device.getAddress().toString());
                     addDevice(device);
-
-//                    if (device.getAddress().contains(DEVICE)) {
-//                        stopScan();
-//                    }
                 }
             };
 

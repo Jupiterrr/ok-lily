@@ -3,6 +3,7 @@ package com.ok_lily_android_client.app;
 import android.app.Activity;
 import android.app.Fragment;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
 import android.content.ComponentName;
 import android.content.Intent;
@@ -24,6 +25,8 @@ import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiInfo;
@@ -38,6 +41,7 @@ public class MainActivity extends Activity {
     public static final String EXTRAS_DEVICE_NAME    = "DEVICE_NAME";
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
     public static final String WEBSERVER             = "ws://192.168.1.8:8080";
+    private final static String DEVICE               = "00:07:80:78:F5:93";
 
     private WebSocketClient mWebSocketClient;
     private TextView text;
@@ -85,8 +89,15 @@ public class MainActivity extends Activity {
     private class BluetoothSearchTask extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... urls) {
-            checkDevices();
-            return "no";
+            while (!checkDevices()) {
+                try {
+                    Thread.sleep(1);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            return null;
         }
 
         @Override
@@ -95,27 +106,16 @@ public class MainActivity extends Activity {
         }
     }
 
-
     @Override
     protected void onResume() {
         super.onResume();
 
         Log.i(TAG, "start scan");
 
-/*        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Log.i("Checking", "resume");
-
-                checkDevices();
-            }
-        });
-*/
-
-        mBluetoothHandler.scanDevices();
-
         BluetoothSearchTask task = new BluetoothSearchTask();
         task.execute();
+
+        mBluetoothHandler.scanDevices();
     }
 
     @Override
@@ -125,14 +125,22 @@ public class MainActivity extends Activity {
         mBluetoothLeService = null;
     }
 
-    private void checkDevices() {
+    private boolean checkDevices() {
+        Log.i(TAG, "Checking devices");
 
-        if (mBluetoothHandler.getDevices().contains("00:07:80:78:F5:93")) {
-            mBluetoothHandler.stopScan();
+        ArrayList<BluetoothDevice> devices = mBluetoothHandler.getDevices();
+        Iterator<BluetoothDevice> iter = devices.iterator();
 
-            Log.i(TAG, "stopper");
+        while (iter.hasNext()) {
+            if (iter.next().getAddress().contains(DEVICE))
+            {
+                mBluetoothHandler.stopScan();
+                Log.i(TAG, "stopper");
+                return true;
+            }
         }
 
+        return false;
     }
 
     // Code to manage Service lifecycle.
