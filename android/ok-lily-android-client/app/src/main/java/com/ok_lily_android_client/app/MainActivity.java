@@ -207,7 +207,7 @@ public class MainActivity extends Activity {
                 JSONObject object = new JSONObject();
                 try {
                     object.put("command", "hello");
-//                    object.put("ownerHint", address);
+                    object.put("payload", "{ ownerHint: android-" + address + "}");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -227,11 +227,18 @@ public class MainActivity extends Activity {
                         try {
                             JSONObject object = (JSONObject) new JSONTokener(message).nextValue();
                             String query = object.getString("command");
-//                            String senderID = object.getString("senderID");
-                            JSONArray payload = object.getJSONArray("payload");
+                            String senderID = object.getString("payload");
+
+                            if (query.contains("hello_ack")) {
+                                myID = senderID;
+                            }
+                            Log.i(TAG, myID);
+                            //JSONArray payload = object.getJSONArray("payload");
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+
+
                     }
                 });
             }
