@@ -91,7 +91,7 @@ public class MainActivity extends Activity {
         protected String doInBackground(String... urls) {
             while (!checkDevices()) {
                 try {
-                    Thread.sleep(1);
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -136,6 +136,7 @@ public class MainActivity extends Activity {
             {
                 mBluetoothHandler.stopScan();
                 Log.i(TAG, "stopper");
+                connectWebSocket();
                 return true;
             }
         }
