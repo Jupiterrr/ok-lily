@@ -106,7 +106,8 @@ angular.module('starter', ['ionic', 'ionic.contrib.frostedGlass'])
     {
       name: "Öffne Präsentation",
       command: {
-        command: "start presi"
+        command: "start presi",
+        targetID: "beamer"
       }
     },
     {
