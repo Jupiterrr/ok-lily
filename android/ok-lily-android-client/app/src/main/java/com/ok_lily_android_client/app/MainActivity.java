@@ -29,6 +29,7 @@ import org.java_websocket.handshake.ServerHandshake;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 import android.net.wifi.WifiManager;
@@ -44,7 +45,8 @@ public class MainActivity extends Activity {
     public static final String EXTRAS_DEVICE_NAME    = "DEVICE_NAME";
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
     public static final String WEBSERVER             = "ws://192.168.1.8:8080";
-    private final static String DEVICE               = "00:07:80:78:F5:93";
+    private static final String DEVICE               = "00:07:80:78:F5:93";
+    private static final Integer DEVICE_DISTANCE     = 55;
 
     private WebSocketClient mWebSocketClient;
     private TextView text;
@@ -136,16 +138,26 @@ public class MainActivity extends Activity {
     private boolean checkDevices() {
         Log.i(TAG, "Checking devices");
 
-        ArrayList<BluetoothDevice> devices = mBluetoothHandler.getDevices();
-        Iterator<BluetoothDevice> iter = devices.iterator();
+        HashMap<BluetoothDevice, Integer> devices = mBluetoothHandler.getDevices();
+        Iterator iter = devices.entrySet().iterator();
+
+        HashMap.Entry<BluetoothDevice, Integer> pairs;
+        Log.i(TAG, "Checking devices Size " + devices.size());
 
         while (iter.hasNext()) {
-            if (iter.next().getAddress().contains(DEVICE))
+            pairs = (HashMap.Entry)iter.next();
+
+            if (pairs.getKey().getAddress().contains(DEVICE))
             {
-                mBluetoothHandler.stopScan();
-                Log.i(TAG, "stopper");
-                connectWebSocket();
-                return true;
+                Log.i(TAG, "RSSI value is" + pairs.getValue().toString());
+
+                if (pairs.getValue() < DEVICE_DISTANCE){
+                    mBluetoothHandler.stopScan();
+                    Log.i(TAG, "Stop scan on Device" + pairs.getKey().toString());
+                    Log.i(TAG, "RSSI value is" + pairs.getValue().toString());
+                    connectWebSocket();
+                    return true;
+                }
             }
         }
 

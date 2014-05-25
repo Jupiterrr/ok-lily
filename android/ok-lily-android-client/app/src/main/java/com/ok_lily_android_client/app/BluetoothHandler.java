@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by stach on 5/24/14.
@@ -28,7 +29,7 @@ public class BluetoothHandler {
     private BluetoothAdapter mBluetoothAdapter;
     private boolean mScanning;
     private static final int REQUEST_ENABLE_BT = 1;
-    private ArrayList<BluetoothDevice> mLeDevices;
+    private HashMap<BluetoothDevice, Integer> mLeDevices;
     private Handler mHandler;
 
     // Stops scanning after 10 seconds.
@@ -36,7 +37,7 @@ public class BluetoothHandler {
 
     public BluetoothHandler(BluetoothAdapter adapter) {
         mBluetoothAdapter = adapter;
-        mLeDevices        = new ArrayList<BluetoothDevice>();
+        mLeDevices        = new HashMap<BluetoothDevice, Integer>();
         mHandler          = new Handler();
     }
 
@@ -58,17 +59,16 @@ public class BluetoothHandler {
         }
     }
 
-    private void addDevice(BluetoothDevice device) {
-        if(!mLeDevices.contains(device)) {
-            mLeDevices.add(device);
+    private void addDevice(BluetoothDevice device, Integer rssi) {
+        mLeDevices.put(device, rssi);
+
+/*        if(mLeDevices.containsKey(device)) {
+            mLeDevices.put(device, rssi);
         }
+        */
     }
 
-    public BluetoothDevice getDevice(int position) {
-        return mLeDevices.get(position);
-    }
-
-    public ArrayList<BluetoothDevice> getDevices() {
+    public HashMap<BluetoothDevice, Integer> getDevices() {
         return mLeDevices;
     }
 
@@ -79,7 +79,7 @@ public class BluetoothHandler {
                 @Override
                 public void onLeScan(final BluetoothDevice device, int rssi, byte[] scanRecord) {
                     Log.i("Device address", device.getAddress().toString());
-                    addDevice(device);
+                    addDevice(device, Math.abs(rssi));
                 }
             };
 
