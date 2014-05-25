@@ -14,8 +14,53 @@
     <script src="main.js"></script>
   </head>
   <body>
-    
-    <ion-pane ng-controller="PageCtrl">
+    <ion-nav-bar class="nav-title-slide-ios7 bar-positive">
+      <ion-nav-back-button class="button-icon ion-arrow-left-c">
+      </ion-nav-back-button>
+    </ion-nav-bar>
+
+    <ion-nav-view animation="slide-left-right"></ion-nav-view>
+
+    <script id="home.html" type="text/ng-template">
+      <ion-view title="Home">
+        <ion-content padding="true" class="has-header" start-y="120">
+          <button class="button button-block" ng-click="send(action)" ng-repeat="action in actions">
+            {{action.name}}
+          </button>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="about.html" type="text/ng-template">
+      <ion-view title="Screens">
+        <ion-content padding="true" class="has-header" start-y="120">
+          <button class="button button-block" ng-click="screen(xscreen)" ng-repeat="xscreen in screens">
+            {{xscreen.name}}
+          </button>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="tabs.html" type="text/ng-template">
+      <ion-tabs class="tabs-icon-top tabs-positive">
+
+        <ion-tab title="Actions" icon="ion-home" href="#/tab/home">
+          <ion-nav-view name="home-tab"></ion-nav-view>
+        </ion-tab>
+
+        <ion-tab title="Screens" icon="ion-ios7-information" href="#/tab/about">
+          <ion-nav-view name="about-tab"></ion-nav-view>
+        </ion-tab>
+
+      </ion-tabs>
+    </script>
+
+
+
+
+
+
+<!--     <ion-pane ng-controller="PageCtrl">
       <header frosted-bar class="bar bar-header bar-frosted">
         <h1 class="title">OK Lily</h1>
       </header>
@@ -28,7 +73,7 @@
       <ion-footer-bar class="bar-frosted">
         <button class="button button-clear button-positive" ng-click="add()">Add Message</button>
       </ion-footer-bar>
-    </ion-pane>
+    </ion-pane> -->
 
   </body>
 </html>
