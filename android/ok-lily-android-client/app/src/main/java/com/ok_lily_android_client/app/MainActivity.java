@@ -41,7 +41,7 @@ public class MainActivity extends Activity {
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
     public static final String WEBSERVER             = "ws://192.168.1.2:8080";
     private static final String DEVICE               = "00:07:80:78:F5:93";
-    private static final Integer DEVICE_RSSI         = 60;
+    private static final Integer DEVICE_RSSI         = 65;
 
     private WebSocketClient mWebSocketClient;
     private TextView text;
