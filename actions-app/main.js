@@ -67,33 +67,62 @@ angular.module('starter', ['ionic', 'ionic.contrib.frostedGlass'])
 
 
   $scope.actions = [
+    // {
+    //   name: "list",
+    //   command: {
+    //     command: "list_users"
+    //   }
+    // },
     {
-      name: "list",
-      command: "list_users"
+      name: "Licht: an",
+      command: {
+        command: "lights_on"
+      }
     },
     {
-      name: "Licht an",
-      command: "lights_on"
+      name: "Licht: aus",
+      command: {
+        command: "lights_off"
+      }
     },
     {
-      name: "Licht aus",
-      command: "lights_off"
+      name: "Licht: alert",
+      command: {
+        command: "lights_alert"
+      }
     },
     {
-      name: "alert",
-      command: "lights_alert"
+      name: "Licht: blinken",
+      command: {
+        command: "lights_blink"
+      }
     },
     {
-      name: "blinken",
-      command: "lights_blink"
+      name: "Alle anwesend!",
+      command: {
+        command: "all available"
+      }
     },
     {
-      name: "alle anwesend",
-      command: "all available"
+      name: "Öffne Präsentation",
+      command: {
+        command: "start presi"
+      }
     },
     {
-      name: "Open Presi",
-      command: "start presi"
+      name: "Öffne Abstimmung",
+      command: {
+        command: "open website",
+        targetID: "beamer",
+        payload: "http://google.com?q=poll"
+      }
+    },
+    {
+      name: "Nächste Folie",
+      command: {
+        command: "next slide",
+        targetID: "beamer"
+      }
     }
   ]
 
@@ -111,22 +140,8 @@ angular.module('starter', ['ionic', 'ionic.contrib.frostedGlass'])
         command: "start share display",
         targetID: "carsten"
       }
-    },
-    {
-      name: "next slide",
-      command: {
-        command: "next slide",
-        targetID: "beamer"
-      }
-    },
-    {
-      name: "poll",
-      command: {
-        command: "open website",
-        targetID: "beamer",
-        payload: "http://google.com?q=poll"
-      }
     }
+    
   ];
 
   function send(msgObj) {
@@ -136,9 +151,7 @@ angular.module('starter', ['ionic', 'ionic.contrib.frostedGlass'])
   }
 
   $scope.send = function(action) {
-    var command = {
-      command: action.command
-    }
+    var command = action.command;
     send(command);
   }
 
