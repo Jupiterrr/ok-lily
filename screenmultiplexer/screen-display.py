@@ -27,7 +27,7 @@ def nextSlide():
     k.tap_key(k.numpad_keys['Page_Down'])
 
 def startPresi():
-    openBrowser("https://docs.google.com/presentation/d/1rAXpVEqZ435SGky5q3ZVkbSyWz97f43D_V2zcRQRIj0/htmlpresent")
+    openBrowser("https://docs.google.com/presentation/d/1rAXpVEqZ435SGky5q3ZVkbSyWz97f43D_V2zcRQRIj0")
     timer.wait(3)
     k.press_key(k.control_key)
     k.press_key(k.shift_key)
