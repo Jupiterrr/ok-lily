@@ -100,7 +100,7 @@ angular.module('starter', ['ionic', 'ionic.contrib.frostedGlass'])
     {
       name: "Alle anwesend!",
       command: {
-        command: "all available"
+        command: "all_available"
       }
     },
     {

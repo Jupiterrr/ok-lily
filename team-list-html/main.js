@@ -14,6 +14,7 @@ connection.onerror = function (error) {
 connection.onmessage = function (e) {
   console.log('Server: ', e.data);
   var obj = JSON.parse(e.data);
+
   if (obj.command == "all_available") {
     ready();
   }
