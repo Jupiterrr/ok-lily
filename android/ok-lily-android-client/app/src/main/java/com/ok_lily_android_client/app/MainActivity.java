@@ -9,6 +9,7 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.media.AudioManager;
 import android.os.AsyncTask;
 import android.os.Handler;
@@ -19,6 +20,7 @@ import android.util.Log;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 
@@ -53,6 +55,7 @@ public class MainActivity extends Activity {
     private String mDeviceName;
     private String mDeviceAddress;
     private BluetoothLeService mBluetoothLeService;
+    private View mView;
 
     //    private Handler mHandler;
     private static final int REQUEST_ENABLE_BT = 1;
@@ -85,6 +88,8 @@ public class MainActivity extends Activity {
         }
 
         mBluetoothHandler = new BluetoothHandler(mBluetoothAdapter);
+
+        mView = this.findViewById(android.R.id.content);
     }
 
     private class BluetoothSearchTask extends AsyncTask<String, Void, String> {
@@ -243,6 +248,7 @@ public class MainActivity extends Activity {
                                 amanager.setStreamMute(AudioManager.STREAM_MUSIC, true);
                                 amanager.setStreamMute(AudioManager.STREAM_RING, true);
                                 amanager.setStreamMute(AudioManager.STREAM_SYSTEM, true);
+                                mView.setBackgroundColor(Color.RED);
                             }
 
                             if (query.contains("unmute_mobile_devices")){
@@ -252,6 +258,7 @@ public class MainActivity extends Activity {
                                 amanager.setStreamMute(AudioManager.STREAM_MUSIC, false);
                                 amanager.setStreamMute(AudioManager.STREAM_RING, false);
                                 amanager.setStreamMute(AudioManager.STREAM_SYSTEM, false);
+                                mView.setBackgroundColor(Color.WHITE);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
