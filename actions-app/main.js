@@ -115,7 +115,7 @@ angular.module('starter', ['ionic', 'ionic.contrib.frostedGlass'])
       command: {
         command: "open website",
         targetID: "beamer",
-        payload: "http://localhost/poll/ask_question.html"
+        payload: "http://localhost/polls/ask_question.html"
       }
     },
     {
