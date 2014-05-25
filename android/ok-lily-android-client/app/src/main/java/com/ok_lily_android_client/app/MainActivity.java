@@ -1,52 +1,47 @@
 package com.ok_lily_android_client.app;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.media.AudioManager;
 import android.os.AsyncTask;
-import android.os.Handler;
 import android.os.IBinder;
-import android.support.v7.app.ActionBarActivity;
-import android.os.Build;
 import android.util.Log;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ExpandableListView;
 import android.widget.TextView;
 
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiInfo;
 import android.content.Context;
-import android.widget.Toast;
 
 import org.json.*;
 
 public class MainActivity extends Activity {
     private final static String TAG = MainActivity.class.getSimpleName();
 
+    /**
+     * @todo move settings out to some server with json config file or use UI
+     */
     public static final String EXTRAS_DEVICE_NAME    = "DEVICE_NAME";
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
-    public static final String WEBSERVER             = "ws://192.168.1.8:8080";
+    public static final String WEBSERVER             = "ws://192.168.1.2:8080";
     private static final String DEVICE               = "00:07:80:78:F5:93";
-    private static final Integer DEVICE_DISTANCE     = 55;
+    private static final Integer DEVICE_RSSI         = 60;
 
     private WebSocketClient mWebSocketClient;
     private TextView text;
@@ -151,7 +146,7 @@ public class MainActivity extends Activity {
             {
                 Log.i(TAG, "RSSI value is" + pairs.getValue().toString());
 
-                if (pairs.getValue() < DEVICE_DISTANCE){
+                if (pairs.getValue() < DEVICE_RSSI){
                     mBluetoothHandler.stopScan();
                     Log.i(TAG, "Stop scan on Device" + pairs.getKey().toString());
                     Log.i(TAG, "RSSI value is" + pairs.getValue().toString());
