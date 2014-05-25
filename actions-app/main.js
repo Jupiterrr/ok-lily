@@ -136,8 +136,18 @@ angular.module('starter', ['ionic', 'ionic.contrib.frostedGlass'])
       }
     },
     {
-      name: "Carsten",
-      command: {
+	name: "ask question",
+	command: {
+	    command: "ask",
+	    payload: {
+		question : "Wart ihr schon wählen?",
+		answers : ["Ja", "Nein"]
+	    }
+	}
+    },
+    {
+	name: "Carsten",
+	command: {
         command: "start share display",
         targetID: "carsten"
       }
