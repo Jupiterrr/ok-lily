@@ -41,9 +41,9 @@ angular.module('starter', ['ionic', 'ionic.contrib.frostedGlass'])
 })
 
 .controller('PageCtrl', function($scope, $ionicFrostedDelegate, $ionicScrollDelegate, $rootScope) {
-  
-  
-  var connection = new WebSocket('ws://localhost:8080');
+
+
+  var connection = new WebSocket('ws://192.168.1.6:8080');
 
   connection.onopen = function () {
     console.log("WebSocket connected");
@@ -82,6 +82,14 @@ angular.module('starter', ['ionic', 'ionic.contrib.frostedGlass'])
     {
       name: "blinken",
       command: "lights_alert"
+    },
+    {
+      name: "alle anwesend",
+      command: "all available"
+    },
+    {
+      name: "start presi",
+      command: "start presi"
     }
   ]
 
@@ -101,12 +109,18 @@ angular.module('starter', ['ionic', 'ionic.contrib.frostedGlass'])
       }
     },
     {
-      name: "Poll",
-      command: {   
+      name: "next slide",
+      command: {
+        command: "next slide",
+        targetID: "beamer"
+      }
+    },
+    {
+      name: "poll",
+      command: {
         command: "open website",
-        targetID: "any",
-        urlClient: "http://www.google.de",
-        urlBeamer: "http://www.aol.de"   
+        targetID: "beamer",
+        payload: "http://google.com?q=poll"
       }
     }
   ];
