@@ -80,8 +80,12 @@ angular.module('starter', ['ionic', 'ionic.contrib.frostedGlass'])
       command: "lights_off"
     },
     {
-      name: "blinken",
+      name: "alert",
       command: "lights_alert"
+    },
+    {
+      name: "blinken",
+      command: "lights_blink"
     },
     {
       name: "alle anwesend",

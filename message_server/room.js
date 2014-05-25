@@ -10,6 +10,12 @@ Room.prototype.join = function (device) {
   this.devices.push(device);
   console.log("device joined: ", device.id);
   device.greet();
+  this.broadcast(null, {
+    command: "notification",
+    devices: this.list(),
+    ID: device.id,
+    type: "join"
+  });
 
   device.ws.on('message', function(message) {
     that.onMessage(device, message);
@@ -25,11 +31,17 @@ Room.prototype.leave = function (device) {
   if (index > -1) {
     this.devices.splice(index, 1);
     console.log("device left: ", device.id);
+    this.broadcast(null, {
+      command: "notification",
+      devices: this.list(),
+      ID: device.id,
+      type: "leave"
+    });
   }
 }
 
 Room.prototype.list = function () {
-  return this.devices;
+  return this.devices.map(function(devices) { return devices.id; });
 }
 
 Room.prototype.onMessage = function (sender, message) {
@@ -47,7 +59,7 @@ Room.prototype.broadcast = function (sender, messageObj) {
   var msg = JSON.stringify(messageObj);
   console.log('broadcast: %s', msg);
   this.devices.forEach(function(device) {
-    if (device != sender) {
+    if (sender == null || device.id != sender.id) {
       device.send(msg);
     }
   })

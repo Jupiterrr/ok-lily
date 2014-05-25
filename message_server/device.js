@@ -19,7 +19,11 @@ Device.prototype.greet = function() {
 }
 
 Device.prototype.send = function(msg) {
-  this.ws.send(msg);
+  try {
+    this.ws.send(msg);
+  } catch (e) {
+    console.log("send error: ", e);
+  }
 }
 
 Device.prototype.sendObj = function(obj) {

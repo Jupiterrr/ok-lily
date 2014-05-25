@@ -61,6 +61,17 @@ Lights.prototype.alert = function() {
     .done();
 }
 
+Lights.prototype.blink = function() {
+  var that = this;
+  var i = 5;
+  var blinkFn = function() {
+    that.alert();
+    if (--i) { setTimeout(blinkFn, 1000); }
+  } 
+  blinkFn();
+}
+
+
 
 module.exports.connect = function(cb) {
   locate(id, function(ip) {
