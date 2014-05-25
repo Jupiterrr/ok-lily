@@ -75,8 +75,9 @@ function init() {
 		    answers = document.getElementById('poll_answers');
 		    for (i in current_answers) {
 			var bar = document.getElementById("bar" + i);
-			bar.setAttribute("style", "height:" + (current_answers[i] / num_answers) * 3 + "em");
-			bar.style.height = (current_answers[i] / num_answers) * 3 + "em";
+			// bar.setAttribute("style", "height:" + (current_answers[i] / num_answers) * 3 + "em");
+      // bar.setAttribute("style", "height:" + current_answers[i] + "em");
+			bar.style.height = current_answers[i] * 3 + "em";
 		    }
 		}
 		break;

@@ -1,3 +1,42 @@
+body {
+  text-align: center;
+  font-family: Arial;
+  font-size: 20pt;
+  font-family: 'Yanone Kaffeesatz', arial, serif;
+}
+
+#Poll {
+  position: absolute;
+  bottom: 20%;
+  left: 50%;
+  margin-left: -200px;
+}
+
 .chartBar {
-    background-color: #00ff00;
+  background-color: #1ca9ee;
+  min-height: 2px !important;
+  width: 100px;
+  margin: 0 50px;
+  margin-bottom: 1em;
+}
+
+#cont0 {
+  display: inline-block;
+}
+
+#cont1 {
+  display: inline-block;
+
+}
+
+h1 {
+  background-color: #1ca9ee;
+  display: inline-block;
+  padding: 3px;
+  position: absolute;
+  top: 5%;
+  left: 0;
+  color: #fff;
+
+  font-weight: 200;
 }
