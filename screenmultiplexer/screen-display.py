@@ -14,8 +14,10 @@ def startVNC(host):
     currentVnc = sub.Popen(['vncviewer', '-ViewOnly', '-Fullscreen', host],stdout=sub.PIPE,stderr=sub.PIPE, preexec_fn=os.setsid)
 
 def stopVNC():
+    print "stop vnc"
     if currentVnc:
         os.killpg(currentVnc.pid, signal.SIGTERM)
+        print "killed"
 
 def openBrowser(url):
     webbrowser.open(url, new = 2, autoraise=True)
@@ -38,4 +40,4 @@ if __name__ == "__main__":
     channel.register_handler("stop show display", stopVNC)
     channel.register_handler("open website", lambda url: openBrowser(url))
     channel.register_handler("start presi", startPresi)
-    channel.loop("ws://192.168.1.6:8080", targetBindings = ["any", "beamer"])
+    channel.loop("ws://192.168.1.2:8080", targetBindings = ["any", "beamer"])

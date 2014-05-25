@@ -109,7 +109,7 @@ angular.module('starter', ['ionic', 'ionic.contrib.frostedGlass'])
       name: "Carsten",
       command: {
         command: "start share display",
-        targetID: 12
+        targetID: "carsten"
       }
     },
     {
