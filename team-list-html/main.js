@@ -35,7 +35,8 @@ function ready() {
   });
   window.setTimeout(function() {
     send({
-      command: "start presi"
+      command: "start presi",
+      targetID: "beamer"
     });
   }, 4000);
 }
