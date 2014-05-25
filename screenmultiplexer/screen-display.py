@@ -4,20 +4,21 @@ from messages import event_channel
 import signal
 import os
 import webbrowser
+import time
 from pykeyboard import PyKeyboard
 
-currentVnc = None
 k = PyKeyboard()
+currentVnc = None
 
 def startVNC(host):
     stopVNC()
     currentVnc = sub.Popen(['vncviewer', '-ViewOnly', '-Fullscreen', host],stdout=sub.PIPE,stderr=sub.PIPE, preexec_fn=os.setsid)
+    print "process is " + str(currentVnc)
 
 def stopVNC():
     print "stop vnc"
-    if currentVnc:
-        os.killpg(currentVnc.pid, signal.SIGTERM)
-        print "killed"
+    currentVnc = sub.Popen(['killall', '-9', 'vncviewer'],stdout=sub.PIPE,stderr=sub.PIPE, preexec_fn=os.setsid)
+    time.sleep(0.5)
 
 def openBrowser(url):
     webbrowser.open(url, new = 2, autoraise=True)
@@ -34,7 +35,6 @@ def startPresi():
     k.release_key(k.control_key)
 
 if __name__ == "__main__":
-    currentVnc = None
     channel = event_channel()
     channel.register_handler("start show display", lambda host: startVNC(host))
     channel.register_handler("stop show display", stopVNC)
