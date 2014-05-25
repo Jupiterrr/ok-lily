@@ -129,6 +129,8 @@ public class MainActivity extends Activity {
         super.onDestroy();
         unbindService(mServiceConnection);
         mBluetoothLeService = null;
+
+        android.os.Process.killProcess(android.os.Process.myPid());
     }
 
     private boolean checkDevices() {
