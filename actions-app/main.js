@@ -92,7 +92,7 @@ angular.module('starter', ['ionic', 'ionic.contrib.frostedGlass'])
       command: "all available"
     },
     {
-      name: "start presi",
+      name: "Open Presi",
       command: "start presi"
     }
   ]
@@ -110,12 +110,6 @@ angular.module('starter', ['ionic', 'ionic.contrib.frostedGlass'])
       command: {
         command: "start share display",
         targetID: "carsten"
-      }
-    },
-    {
-      name: "Open Presi",
-      command: {
-        command: "start presi"
       }
     },
     {
