@@ -288,11 +288,13 @@ public class MainActivity extends Activity {
             @Override
             public void onClose(int i, String s, boolean b) {
                 Log.i("Websocket", "Closed " + s);
+                text.setText("Connection closed");
             }
 
             @Override
             public void onError(Exception e) {
                 Log.i("Websocket", "Error " + e.getMessage());
+                text.setText("Connection error" + e.getMessage());
             }
         };
         mWebSocketClient.connect();
