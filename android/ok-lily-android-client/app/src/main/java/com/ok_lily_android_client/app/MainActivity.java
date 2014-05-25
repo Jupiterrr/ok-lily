@@ -239,6 +239,15 @@ public class MainActivity extends Activity {
                                 myID = senderID;
 
                                 Log.i(TAG, "My ID" + myID);
+
+                                JSONObject cmd2 = new JSONObject();
+                                try {
+                                    cmd2.put("command", "all_available");
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+                                mWebSocketClient.send(cmd2.toString());
                             }
 
                             if (query.contains("mute_mobile_devices")){
