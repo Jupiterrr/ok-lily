@@ -49,7 +49,7 @@ function sendMessage(msg){
 
             }, 5); // wait 5 millisecond for the connection...
     }
-      var socket = new WebSocket('ws://192.168.1.8:8080');
+      var socket = new WebSocket('ws://192.168.1.2:8080');
       sendMessage(JSON.stringify({
     	command : "hello",
         payload : {ownerHint : "browser"}
