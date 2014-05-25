@@ -28,16 +28,18 @@ def nextSlide():
 
 def startPresi():
     openBrowser("https://docs.google.com/presentation/d/1rAXpVEqZ435SGky5q3ZVkbSyWz97f43D_V2zcRQRIj0")
-    timer.wait(3)
+    time.sleep(5)
     k.press_key(k.control_key)
     k.press_key(k.shift_key)
     k.tap_key(k.function_keys[5])
+    k.release_key(k.shift_key)
     k.release_key(k.control_key)
 
 if __name__ == "__main__":
     channel = event_channel()
     channel.register_handler("start show display", lambda host: startVNC(host))
     channel.register_handler("stop show display", stopVNC)
+    channel.register_handler("next slide", nextSlide)
     channel.register_handler("open website", lambda url: openBrowser(url))
     channel.register_handler("start presi", startPresi)
     channel.loop("ws://192.168.1.2:8080", targetBindings = ["any", "beamer"])

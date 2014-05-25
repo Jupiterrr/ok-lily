@@ -1,4 +1,4 @@
-var connection = new WebSocket('ws://localhost:8080');
+var connection = new WebSocket('ws://192.168.1.2:8080');
 var readyState = false;
 
 connection.onopen = function () {
