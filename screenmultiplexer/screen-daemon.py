@@ -10,4 +10,4 @@ def initiate():
 if __name__ == "__main__":
     channel = event_channel()
     channel.register_handler("start share display", initiate)
-    channel.loop("ws://192.168.1.8:8080")
+    channel.loop("ws://192.168.1.2:8080")

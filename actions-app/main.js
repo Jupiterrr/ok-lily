@@ -43,7 +43,7 @@ angular.module('starter', ['ionic', 'ionic.contrib.frostedGlass'])
 .controller('PageCtrl', function($scope, $ionicFrostedDelegate, $ionicScrollDelegate, $rootScope) {
 
 
-  var connection = new WebSocket('ws://192.168.1.6:8080');
+  var connection = new WebSocket('ws://192.168.1.2:8080');
 
   connection.onopen = function () {
     console.log("WebSocket connected");
@@ -99,17 +99,23 @@ angular.module('starter', ['ionic', 'ionic.contrib.frostedGlass'])
 
   $scope.screens = [
     {
-      name: "Bildschirm 1",
+      name: "Tobi",
       command: {
-        command: "start share display",
-        targetID: 1
+        command: "stop show display",
+        targetID: "beamer"
       }
     },
     {
-      name: "Bildschirm 2",
+      name: "Carsten",
       command: {
         command: "start share display",
-        targetID: 2
+        targetID: 12
+      }
+    },
+    {
+      name: "Open Presi",
+      command: {
+        command: "start presi"
       }
     },
     {
