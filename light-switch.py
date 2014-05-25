@@ -12,4 +12,4 @@ if __name__ == "__main__":
     channel = event_channel()
     channel.register_handler("lights on", lambda: execute("/home/pi/plugwise/plugwise_util -d /dev/ttyUSB0 -s on -m 000D6F0002588DA4".split()))
     channel.register_handler("lights off", lambda: execute("/home/pi/plugwise/plugwise_util -d /dev/ttyUSB0 -s off -m 000D6F0002588DA4".split()))
-    channel.loop("ws://192.168.1.8:8080")
+    channel.loop(sys.argv[1])
